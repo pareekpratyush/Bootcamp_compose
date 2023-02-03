@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
-private val BASE_URL = "https://run.mocky.io/v3/b6a30bb0-140f-4966-8608-1dc35fa1fadc/"
+private val BASE_URL = "https://run.mocky.io/"
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(GsonConverterFactory.create())
@@ -12,7 +12,7 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface ApiService{
-    @GET(".")
+    @GET("v3/b6a30bb0-140f-4966-8608-1dc35fa1fadc")
     suspend fun getItems():ApiItem
 }
 
