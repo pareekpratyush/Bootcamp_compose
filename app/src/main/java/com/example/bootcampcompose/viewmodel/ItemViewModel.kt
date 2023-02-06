@@ -1,8 +1,12 @@
 package com.example.bootcampcompose.viewmodel
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bootcampcompose.db.ItemRepo
@@ -12,10 +16,17 @@ import com.example.bootcampcompose.Item
 import com.example.bootcampcompose.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 
 class ItemViewModel(private val itemRepo: ItemRepo) : ViewModel() {
 
-    var itemList: List<Item> by mutableStateOf(listOf())
+    private val itemList: MutableLiveData<List<Item>> by lazy{
+        MutableLiveData<List<Item>>(listOf())
+    }
+
+    private val filteredList: MutableLiveData<List<Item>> by lazy{
+        MutableLiveData<List<Item>>(listOf())
+    }
 
     init {
         updateDB()
@@ -27,9 +38,20 @@ class ItemViewModel(private val itemRepo: ItemRepo) : ViewModel() {
         }
     }
 
-    fun getFlow() = itemRepo.getItemsFlow()
-
     fun addItem(item: Item) = viewModelScope.launch {
         itemRepo.insertItem(item)
+    }
+
+    fun getData():LiveData<List<Item>>{
+        return itemList
+    }
+
+    fun getAll() = itemRepo.getItemsFlow()
+
+    fun searchItem(query: MutableState<TextFieldValue>): Flow<List<Item>>{
+        if(query.value.text=="") {
+            return getAll()
+        }
+        return itemRepo.searchItem(query.value.text)
     }
 }

@@ -11,10 +11,12 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -30,7 +32,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun Init(itemList: List<Item>) {
+fun Init(itemList: List<Item>,query: MutableState<TextFieldValue>) {
     val scope = rememberCoroutineScope()
     val pageState = rememberPagerState(initialPage = 0)
 
@@ -68,7 +70,7 @@ fun Init(itemList: List<Item>) {
                 )
             }
         },
-        topBar = { Header() }
+        topBar = { Header(query) }
     ) { padding ->
         HorizontalPager(count = 5, state = pageState) { it ->
             when (it) {

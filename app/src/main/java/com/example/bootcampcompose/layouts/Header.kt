@@ -8,19 +8,21 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-
 @Composable
-fun Header() {
+fun Header(query: MutableState<TextFieldValue>) {
     Surface(color = Color(230, 233, 246)) {
         Column(
             modifier = Modifier.padding(34.dp, 35.dp, 34.dp, 21.dp)
@@ -44,16 +46,21 @@ fun Header() {
                 )
             }
             Spacer(modifier = Modifier.height(15.dp))
-            SearchBar()
+            SearchBar(query)
         }
     }
 }
 
+
 @Composable
-fun SearchBar(){
+fun SearchBar(
+    state: MutableState<TextFieldValue>
+) {
     TextField(
-        value = "",
-        onValueChange = {},
+        value = state.value,
+        onValueChange = {
+            state.value = it
+        },
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp)
@@ -66,46 +73,16 @@ fun SearchBar(){
         ),
         singleLine = true,
         placeholder = {
-            Text(text="Search",
+            Text(
+                text = "Search",
                 modifier = Modifier.alpha(ContentAlpha.medium)
             )
         }
     )
 }
 
-@Composable
-fun SearchBarExp(
-    text:String,
-    onTextChange:(String)->Unit,
-    onCloseClicked:()->Unit,
-    onSearchClicked:(String)->Unit
-){
-    TextField(
-        value = text,
-        onValueChange = {onTextChange(it)},
-        modifier = Modifier
-        .fillMaxWidth()
-        .height(50.dp)
-        .clip(RoundedCornerShape(50))
-        .border(BorderStroke(width = 1.dp, color = Color(232, 232, 232))),
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color(246, 246, 246),
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-        ),
-        singleLine = true,
-        placeholder = {
-            Text(text="Search",
-                modifier = Modifier.alpha(ContentAlpha.medium)
-            )
-        },
-        //KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        //KeyboardActions = KeyboardActions(onSearch = {onSearchClicked(text)})
-    )
-}
-
 @Preview
 @Composable
-fun ihatemyself(){
-    SearchBarExp("",{},{},{})
+fun defaultPreview() {
+    //SearchBarExp({})
 }
