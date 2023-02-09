@@ -20,14 +20,6 @@ import kotlinx.coroutines.flow.Flow
 
 class ItemViewModel(private val itemRepo: ItemRepo) : ViewModel() {
 
-    private val itemList: MutableLiveData<List<Item>> by lazy{
-        MutableLiveData<List<Item>>(listOf())
-    }
-
-    private val filteredList: MutableLiveData<List<Item>> by lazy{
-        MutableLiveData<List<Item>>(listOf())
-    }
-
     init {
         updateDB()
     }
@@ -36,14 +28,6 @@ class ItemViewModel(private val itemRepo: ItemRepo) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             itemRepo.updateDB()
         }
-    }
-
-    fun addItem(item: Item) = viewModelScope.launch {
-        itemRepo.insertItem(item)
-    }
-
-    fun getData():LiveData<List<Item>>{
-        return itemList
     }
 
     fun getAll() = itemRepo.getItemsFlow()
